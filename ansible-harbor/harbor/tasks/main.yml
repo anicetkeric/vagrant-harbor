@@ -1,0 +1,48 @@
+---
+- name: "Creating Harbor directory... ({{ HARBOR_INSTALL_DIR }})"
+  file:
+    path: "{{ HARBOR_INSTALL_DIR }}"
+    state: directory
+    mode: "ug=rxw,o=rx"
+
+- name: Unzip Harbor sources
+  unarchive:
+    src: "{{ HARBOR_RELEASE_URL }}"
+    dest: "{{ HARBOR_INSTALL_DIR }}/"
+    remote_src: yes
+
+- name: Copying over harbor.yml
+  template:
+    src: harbor.yaml.j2
+    dest: "{{ HARBOR_INSTALL_DIR }}/harbor/harbor.yml"
+
+- name: If ADD_NOTARY=false, execute install.sh
+  shell: "{{HARBOR_INSTALL_DIR}}/harbor/install.sh"
+  args:
+    chdir: "{{HARBOR_INSTALL_DIR}}/harbor/"
+  when: not ADD_NOTARY
+ 
+- name: If ADD_NOTARY=true, execute install.sh --with-notary
+  shell: "{{HARBOR_INSTALL_DIR}}/harbor/install.sh --with-notary"
+  args:
+    chdir: "{{HARBOR_INSTALL_DIR}}/harbor/"
+  when: ADD_NOTARY
+
+- name: Copy harbor.service
+  template:
+    src: harbor.service.j2
+    dest: /lib/systemd/system/harbor.service
+
+- name: Harbor service enable
+  systemd:
+    name: harbor
+    state: started
+    enabled: yes
+    daemon_reload: yes   
+    
+- name: Emit Harbor URL
+  command: echo "Harbor can be accessed at, {{harbor_ui_url_protocol}}://{{ harbor_hostname }}:{{ harbor_port }}"
+  register: harbor_url
+
+- name: Harbor URL info
+  debug: msg="{{ harbor_url.stdout }}"

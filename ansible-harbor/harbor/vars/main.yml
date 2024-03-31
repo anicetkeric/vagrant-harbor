@@ -1,0 +1,8 @@
+
+HARBOR_INSTALL_DIR: /opt/harbor
+HARBOR_VERSION: 2.10.1
+
+HARBOR_RELEASE_URL: https://github.com/vmware/harbor/releases/download/v{{ HARBOR_VERSION }}/harbor-offline-installer-v{{ HARBOR_VERSION }}.tgz
+ADD_NOTARY: false
+
+docker_insecure_registry: /etc/docker

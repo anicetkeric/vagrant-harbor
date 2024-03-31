@@ -1,0 +1,22 @@
+---
+
+docker_compose_executable: /usr/local/bin/docker-compose
+docker_compose_install_python_package: True
+
+# Edition can be one of: 'ce' (Community Edition) or 'ee' (Enterprise Edition).
+docker_edition: 'ce'
+docker_packages:
+  - "docker-{{ docker_edition }}"
+  - "docker-{{ docker_edition }}-cli"
+  - "docker-{{ docker_edition }}-rootless-extras"
+  - "containerd.io"
+docker_packages_state: present
+
+# Docker repo URL.
+docker_repo_url: https://download.docker.com/linux
+
+# Used only for RedHat/CentOS/Fedora.
+docker_yum_repo_url: "{{ docker_repo_url }}/centos/docker-{{ docker_edition }}.repo"
+docker_yum_repo_enable_nightly: '0'
+docker_yum_repo_enable_test: '0'
+docker_yum_gpg_key: "{{ docker_repo_url }}/centos/docker-{{ docker_edition }}.repo"

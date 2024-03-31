@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - shell: whoami
+  roles:  
+    - docker
+    - harbor

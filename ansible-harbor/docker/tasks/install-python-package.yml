@@ -1,0 +1,15 @@
+
+- name: check python interpreter version
+  fail:
+    msg: python package docker-compose is not supported for python interpreter version < 3.4 
+  when: ansible_python.version.major < 3 or ansible_python.version.minor < 4 
+
+- name: install python3-pip
+  apt:
+    name: python3-pip
+
+- name: install python3 package docker-compose
+  pip:
+    name: docker-compose
+    executable: pip3
+

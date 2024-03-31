@@ -1,0 +1,10 @@
+---
+- name: setup insecure registry
+  template:
+    src: daemon.json.j2
+    dest: "{{ docker_insecure_registry }}/daemon.json"
+    owner: root
+    group: root
+    mode: '0775'
+  when:
+    - harbor_ui_url_protocol == 'http' 

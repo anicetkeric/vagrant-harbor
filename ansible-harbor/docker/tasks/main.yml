@@ -1,0 +1,51 @@
+
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name:
+      - docker
+      - docker-common
+      - docker-engine
+    state: absent
+
+- name: Install required packages
+  yum:
+    state: latest
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+      - git
+
+- name: Add Docker repository.
+  get_url:
+    url: "{{ docker_yum_repo_url }}"
+    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install Docker
+  package:
+   name: 
+    - docker-{{ docker_edition }}
+    - docker-{{ docker_edition }}-cli 
+    - containerd.io 
+    - docker-compose-plugin
+   state: latest
+
+- name: Add user vagrant to docker group
+  user:
+    name: vagrant
+    groups: docker
+    append: yes
+      
+- name: Start Docker service
+  service:
+   name: docker
+   state: started
+   enabled: yes
+    
+
+               
+
+

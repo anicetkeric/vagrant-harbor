@@ -1,0 +1,15 @@
+[Unit]
+Description=Harbor service
+After=docker.service systemd-networkd.service systemd-resolved.service
+Requires=docker.service
+Documentation=http://github.com/vmware/harbor
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+ExecStart=/bin/bash -c "docker compose -f {{ HARBOR_INSTALL_DIR }}/harbor/docker-compose.yml up"
+ExecStop=/bin/bash -c "docker compose -f {{ HARBOR_INSTALL_DIR }}/harbor/docker-compose.yml down"
+
+[Install]
+WantedBy=multi-user.target

@@ -19,7 +19,7 @@ Harbor Docker Image Registry Setup Using Ansible and Vagrant
 
 ## Documentation
 
-[Blog](https://boottechnologies-ci.medium.com/)
+[Blog](https://boottechnologies-ci.medium.com/harbor-docker-image-registry-setup-using-ansible-and-vagrant-ffa586e8ef35)
 
 
 ## Authors
